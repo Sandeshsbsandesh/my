@@ -1,5 +1,6 @@
 import type { ReactElement } from "react"
 import type { MockName } from "../data/site"
+import { publicUrl } from "../lib/publicUrl"
 import { CreatorFan } from "./CreatorFan"
 import { BusinessSite, LandingSite, RevampSite, StartupSite } from "./WorkSamples"
 
@@ -50,7 +51,7 @@ export function InfluencerMock({ name }: { name?: string } = {}) {
   return (
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-[#e4b133] text-[#1c1c1c]" aria-hidden="true">
       <img
-        src="/influencer-plate.jpg"
+        src={publicUrl("influencer-plate.jpg")}
         alt=""
         className="pointer-events-none absolute inset-y-0 right-0 h-full w-[56%] object-cover object-[74%_38%] grayscale contrast-125"
       />
@@ -109,7 +110,7 @@ export function BoutiqueMock({ name }: { name?: string } = {}) {
       className="relative h-full min-h-0 overflow-hidden bg-[#ead9c5] text-[#2a2118]"
       style={{
         backgroundImage:
-          "linear-gradient(90deg, #ead9c5 0 40%, rgb(234 217 197 / 0) 56%), url(/boutique-plate.jpg)",
+          `linear-gradient(90deg, #ead9c5 0 40%, rgb(234 217 197 / 0) 56%), url(${publicUrl("boutique-plate.jpg")})`,
         backgroundPosition: "center, 88% 42px",
         backgroundSize: "auto, auto 132%",
       }}
@@ -183,7 +184,7 @@ export function ClinicMock({ name }: { name?: string } = {}) {
       className="relative h-full min-h-0 overflow-hidden bg-[#bfc7af] text-[#1c2b22]"
       style={{
         backgroundImage:
-          "linear-gradient(90deg, #bfc7af 0 40%, rgb(191 199 175 / 0) 56%), url(/clinic-plate.jpg)",
+          `linear-gradient(90deg, #bfc7af 0 40%, rgb(191 199 175 / 0) 56%), url(${publicUrl("clinic-plate.jpg")})`,
         backgroundPosition: "center, 90% 20px",
         backgroundSize: "auto, auto 132%",
       }}
@@ -304,7 +305,7 @@ export function JewelleryMock({ name }: { name?: string } = {}) {
         </div>
         <div className="grid min-h-0 grid-rows-[1.15fr_0.85fr] gap-1.5 py-2 pr-2">
           <article className="flex min-h-0 overflow-hidden rounded-lg bg-white shadow-[0_8px_18px_-14px_rgba(36,28,22,0.6)]">
-            <img src="/jewellery-ring.jpg" alt="" className="h-full w-[46%] object-cover" />
+            <img src={publicUrl("jewellery-ring.jpg")} alt="" className="h-full w-[46%] object-cover" />
             <div className="flex min-w-0 flex-1 flex-col justify-center px-2">
               <span className="text-[7.5px] font-semibold uppercase tracking-[0.12em] text-[#241c16]/45">In the case</span>
               <span className="font-serif text-[13px] leading-tight">Signet ring</span>
@@ -314,7 +315,7 @@ export function JewelleryMock({ name }: { name?: string } = {}) {
           <div className="grid min-h-0 grid-cols-2 gap-1.5">
             <article className="flex min-h-0 flex-col overflow-hidden rounded-lg bg-white">
               <div className="relative min-h-0 flex-1">
-                <img src="/jewellery-chain.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={publicUrl("jewellery-chain.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover" />
               </div>
               <div className="px-1.5 py-1">
                 <span className="block text-[9px] font-medium leading-none">Chain</span>
@@ -323,7 +324,7 @@ export function JewelleryMock({ name }: { name?: string } = {}) {
             </article>
             <article className="flex min-h-0 flex-col overflow-hidden rounded-lg bg-white">
               <div className="relative min-h-0 flex-1">
-                <img src="/jewellery-studs.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={publicUrl("jewellery-studs.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover" />
               </div>
               <div className="px-1.5 py-1">
                 <span className="block text-[9px] font-medium leading-none">Studs</span>
@@ -351,7 +352,7 @@ export function HotelMock({ name }: { name?: string } = {}) {
         <span className="rounded-full bg-[#1b2430] px-2 py-1 text-[8px] font-medium text-white">Book now</span>
       </div>
       <div className="relative mx-2 mb-2 min-h-0 flex-1 overflow-hidden rounded-xl">
-        <img src="/hotel-room.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-[50%_62%]" />
+        <img src={publicUrl("hotel-room.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover object-[50%_62%]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(20_28_36/0.42)_0%,transparent_42%,rgb(20_28_36/0.55)_100%)]" />
         <div className="absolute left-2.5 top-2.5 max-w-[78%]">
           <p className="text-[8px] font-semibold tracking-[0.14em] text-white">HOTEL · YOUR CITY</p>

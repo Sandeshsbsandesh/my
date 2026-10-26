@@ -5,9 +5,11 @@ import { NotFoundPage } from "./pages/NotFoundPage"
 import { StartPage } from "./pages/StartPage"
 import { WorkPage } from "./pages/WorkPage"
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "")
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />

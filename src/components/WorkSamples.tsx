@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { publicUrl } from "../lib/publicUrl"
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -219,7 +220,7 @@ function ShopServices({ onPick }: { onPick: (index: number) => void }) {
   ]
   return (
     <div className="relative h-full overflow-hidden text-[#2a2118]">
-      <img src="/boutique-plate.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-[72%_center]" />
+      <img src={publicUrl("boutique-plate.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover object-[72%_center]" />
       <ShopBar active={0} onPick={onPick} />
       <div className="relative max-w-[280px] px-5 pt-2">
         <p className="font-serif text-[2.2rem] leading-[0.92] tracking-[-0.03em]">Book a time this week.</p>

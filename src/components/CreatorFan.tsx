@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { publicUrl } from "../lib/publicUrl"
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -42,7 +43,7 @@ function ReelsPage({ onPick }: { onPick: (index: number) => void }) {
   ]
   return (
     <div className="relative h-full overflow-hidden text-[#14203a]">
-      <img src="/influencer-plate.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_center]" />
+      <img src={publicUrl("influencer-plate.jpg")} alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_center]" />
       <SiteBar active={0} onPick={onPick} />
       <div className="relative flex h-[calc(100%-46px)] flex-col px-5 pb-4 pt-1">
         <span className="w-fit rounded-full border border-[#14203a]/15 bg-white/80 px-2.5 py-1 text-[10px] font-semibold tracking-[0.14em]">CREATOR · SAMPLE</span>
