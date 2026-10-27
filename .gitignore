@@ -1,5 +1,6 @@
 node_modules
 dist
+out
 .vite
 .shots
 .DS_Store
