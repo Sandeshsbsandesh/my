@@ -24,7 +24,7 @@ export function Pricing() {
   }
 
   return (
-    <section id="pricing" className="bg-paper-2">
+    <section id="pricing" className="scroll-mt-24 bg-paper-2">
       <div className="wrap py-12 sm:py-16">
         <Reveal>
           <SectionLabel>Pricing</SectionLabel>

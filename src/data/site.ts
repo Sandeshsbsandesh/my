@@ -8,11 +8,9 @@ export const site = {
    */
   url: "",
   /**
-   * Inbox that receives briefs. When set, the form can open the visitor's email app.
-   * Leave empty to offer copy and download only.
-   * Example: "hello@yourstudio.com"
+   * Inbox that receives briefs. This is the To address, not the SMTP From.
    */
-  email: "sandeshsb0219@gmail.com",
+  email: "sandesh@resolveindia.com",
   /**
    * Country code + number, digits only. Example: "919876543210".
    * Leave empty to hide the WhatsApp link.

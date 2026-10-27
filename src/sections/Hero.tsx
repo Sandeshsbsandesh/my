@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { Button } from "../components/Button"
 import { cn } from "../lib/cn"
+import { PREVIEW_EVENT } from "../lib/links"
 
 const HOLD_MS = 2500
 const READ_MS = 5000
@@ -59,7 +60,7 @@ const SCENES: Array<{
     id: "preview",
     label: "Preview",
     theme: "hero-scene-cream",
-    hold: 4000,
+    hold: 3200,
     from: "right",
     enter: 1100,
     title: "Your coolest website.",
@@ -398,6 +399,23 @@ export function Hero({ hold = false, embed = false }: { hold?: boolean; embed?: 
   }, [play, reduce, paused, shown])
 
   useEffect(() => {
+    const onPreview = () => {
+      settledRef.current = 0
+      setShown(0)
+      setSettled(0)
+      setPaused(false)
+      if (reduce || hold) {
+        setPlay(true)
+        return
+      }
+      setPlay(false)
+      window.requestAnimationFrame(() => setPlay(true))
+    }
+    window.addEventListener(PREVIEW_EVENT, onPreview)
+    return () => window.removeEventListener(PREVIEW_EVENT, onPreview)
+  }, [hold, reduce])
+
+  useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target
       if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return
@@ -411,7 +429,7 @@ export function Hero({ hold = false, embed = false }: { hold?: boolean; embed?: 
   const previewHref = business.trim() ? `/start?name=${encodeURIComponent(business.trim())}` : "/start"
 
   return (
-    <section className={cn("relative min-h-[calc(100svh-4rem-1px)] overflow-hidden", (play || reduce) && "hero-ready")}>
+    <section id="hero" className={cn("scroll-mt-24 relative min-h-[calc(100svh-4rem-1px)] overflow-hidden", (play || reduce) && "hero-ready")}>
       {SCENES.map((scene, index) => {
         const visible = index === shown || index === settled
         return (
@@ -455,7 +473,7 @@ export function Hero({ hold = false, embed = false }: { hold?: boolean; embed?: 
                     onChange={(event) => setBusiness(event.target.value)}
                     onFocus={() => setPaused(true)}
                     onBlur={() => setPaused(false)}
-                    placeholder="Northwind Studio"
+                    placeholder="Enter name here"
                     maxLength={32}
                     autoComplete="organization"
                     className="mt-1.5 w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-base text-[#10131B] outline-none placeholder:text-[#5c574e]/70 focus-visible:border-[#10131B]"

@@ -1,11 +1,52 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion"
-import { BarChart3, CalendarCheck, CreditCard, MessageCircle, Plug } from "lucide-react"
+import { BarChart3, CalendarCheck, ClipboardPenLine, Clock3, CreditCard, Globe, MessageCircle, MessagesSquare, Plug } from "lucide-react"
 import { MaskHeading, Reveal } from "../components/motion"
 import { SectionLabel } from "../components/SectionLabel"
 import { integrations, processSteps } from "../data/site"
 
 type Step = (typeof processSteps)[number]
+
+const stepIcons = [
+  { Icon: ClipboardPenLine, motion: "write" },
+  { Icon: Clock3, motion: "clock" },
+  { Icon: MessagesSquare, motion: "chat" },
+  { Icon: Globe, motion: "live" },
+] as const
+
+function StepIcon({ index, reduce }: { index: number; reduce: boolean | null }) {
+  const item = stepIcons[index]
+  if (!item) return null
+  const { Icon, motion: kind } = item
+  const loop =
+    kind === "write"
+      ? { y: [0, -4, 0], rotate: [0, -8, 0] }
+      : kind === "clock"
+        ? { rotate: [0, 360] }
+        : kind === "chat"
+          ? { scale: [1, 1.12, 1], y: [0, -2, 0] }
+          : { rotate: [0, 16, 0, -16, 0], scale: [1, 1.06, 1] }
+  const time = kind === "clock" ? 10 : kind === "live" ? 4.8 : 2.4
+
+  return (
+    <motion.span
+      className="grid size-8 shrink-0 place-items-center rounded-full border border-ink/15 bg-paper text-ink"
+      aria-hidden="true"
+      initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+      transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.span
+        className="grid place-items-center"
+        animate={reduce ? undefined : loop}
+        transition={reduce ? undefined : { duration: time, repeat: Infinity, ease: kind === "clock" ? "linear" : "easeInOut" }}
+      >
+        <Icon className="size-4" strokeWidth={1.7} />
+      </motion.span>
+    </motion.span>
+  )
+}
 
 function Arrow({ className }: { className: string }) {
   return (
@@ -41,8 +82,11 @@ function FlowNode({
         <span className="relative z-10 grid size-10 shrink-0 place-items-center rounded-full border border-accent bg-paper-2 font-serif italic text-accent">
           {step.index}
         </span>
-        <div className="pt-1.5">
-          <h3 className="font-serif text-xl leading-tight">{step.title}</h3>
+        <div className="min-w-0 pt-1.5">
+          <div className="flex items-center gap-2.5">
+            <h3 className="font-serif text-xl leading-tight">{step.title}</h3>
+            <StepIcon index={index} reduce={reduce} />
+          </div>
           <p className="mt-1 max-w-[62ch] text-base text-ink-soft">{step.text}</p>
         </div>
       </div>
@@ -77,7 +121,7 @@ export function Process() {
 
   return (
     <>
-    <section id="process" className="bg-paper-2">
+    <section id="process" className="scroll-mt-24 bg-paper-2">
       <div className="wrap py-12 sm:py-16">
         <Reveal>
           <SectionLabel>Process</SectionLabel>

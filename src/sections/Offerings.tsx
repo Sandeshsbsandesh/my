@@ -15,6 +15,7 @@ export function Offerings() {
   const [paused, setPaused] = useState(false)
   const [inView, setInView] = useState(false)
   const [wide, setWide] = useState(false)
+  const [restart, setRestart] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
   const item = works[active]
@@ -34,6 +35,12 @@ export function Offerings() {
     observer.observe(node)
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!inView) return
+    setActive(0)
+    setRestart((value) => value + 1)
+  }, [inView])
 
   useEffect(() => {
     if (reduce || paused || !inView || !wide) return
@@ -126,17 +133,17 @@ export function Offerings() {
         >
           <div className="rounded-xl bg-ink p-4 text-paper shadow-[0_30px_60px_-36px_rgba(20,22,28,0.7)] sm:p-5">
             {reduce ? (
-              <Preview work={item} onDark />
+              <Preview work={item} onDark restart={restart} />
             ) : (
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={item.id}
+                  key={`${item.id}-${restart}`}
                   initial={{ opacity: 0, y: 18, scale: 0.985 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.42, ease: EASE }}
                 >
-                  <Preview work={item} onDark />
+                  <Preview work={item} onDark restart={restart} />
                 </motion.div>
               </AnimatePresence>
             )}
@@ -168,7 +175,7 @@ export function Offerings() {
               <Collapse open={selected}>
                 <div className="pb-4">
                   <div className="rounded-xl bg-ink p-3 text-paper">
-                    <Preview work={work} onDark />
+                    <Preview work={work} onDark restart={restart} />
                   </div>
                 </div>
               </Collapse>
@@ -181,14 +188,22 @@ export function Offerings() {
   )
 }
 
-function Preview({ work, onDark = false }: { work: (typeof works)[number]; onDark?: boolean }) {
+function Preview({
+  work,
+  onDark = false,
+  restart = 0,
+}: {
+  work: (typeof works)[number]
+  onDark?: boolean
+  restart?: number
+}) {
   return (
     <>
       <p className={cn("mb-3 text-xs font-medium uppercase tracking-[0.16em]", onDark ? "text-paper/70" : "text-muted")}>
         Sample layout
       </p>
       <BrowserFrame url="yoursite.com">
-        <Mockup name={work.mock} />
+        <Mockup key={restart} name={work.mock} />
       </BrowserFrame>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <p className={cn("text-base", onDark ? "text-paper/70" : "text-ink-soft")}>Placeholder content, not a client project.</p>

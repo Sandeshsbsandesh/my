@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { footerNav, footerServices, site, whatsappHref } from "../data/site"
+import { toHref } from "../lib/links"
 import { Logo } from "./Logo"
 
 export function Footer() {
+  const { pathname } = useLocation()
   const whatsapp = whatsappHref()
   return (
     <footer className="border-t border-line bg-paper">
@@ -18,7 +20,7 @@ export function Footer() {
           <ul className="mt-3 space-y-2">
             {footerNav.map((item) => (
               <li key={item.href}>
-                <Link to={item.href} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
+                <Link to={toHref(item.href, pathname)} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
                   {item.label}
                 </Link>
               </li>
@@ -30,7 +32,7 @@ export function Footer() {
           <ul className="mt-3 space-y-2">
             {footerServices.map((item) => (
               <li key={item.label}>
-                <Link to={item.href} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
+                <Link to={toHref(item.href, pathname)} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
                   {item.label}
                 </Link>
               </li>

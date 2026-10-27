@@ -9,7 +9,7 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section id="faq">
+    <section id="faq" className="scroll-mt-24">
       <div className="wrap py-12 sm:py-16">
         <Reveal>
           <SectionLabel>FAQ</SectionLabel>

@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import { formatMail, MAIL, mailSubject, parseDraft } from "../functions/_lib/mail-config.js"
+import { formatMail, MAIL, mailError, mailSubject, parseDraft } from "../functions/_lib/mail-config.js"
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -64,7 +64,7 @@ export function previewMailPlugin() {
           send(res, 200, { ok: true })
         } catch (error) {
           console.error("preview mail failed", error)
-          send(res, 502, { ok: false, error: "Could not send right now. Try again." })
+          send(res, 502, { ok: false, error: mailError(error) })
         }
       })
     },

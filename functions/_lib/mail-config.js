@@ -1,12 +1,12 @@
-// FROM and TO must be verified in Amazon SES, region ap-south-1 (sandbox requires both).
+// TO is the inbox. FROM must be a verified SES identity in ap-south-1, not the Gmail.
 export const MAIL = {
   host: "email-smtp.ap-south-1.amazonaws.com",
   port: 587,
   user: "AKIATAGTNP7AMUSEWUH4",
   pass: "BAuIBOIOGbAfh5ejqKg9ch8xp8tI9mzYFG+X76bKC8bN",
-  to: "sandeshsb0219@gmail.com",
+  to: "sandesh@resolveindia.com",
   fromName: "Zebriyo",
-  fromEmail: "sandeshsb0219@gmail.com",
+  fromEmail: "sandesh@resolveindia.com",
 }
 
 const MAX = {
@@ -87,4 +87,12 @@ export function formatMail(draft) {
 
 export function mailSubject(draft) {
   return `Website preview — ${draft.projectName}`
+}
+
+export function mailError(error) {
+  const text = String(error?.message || error || "")
+  if (text.includes("not verified") || text.includes("Email address is not verified")) {
+    return `Amazon SES has not verified the From address (${MAIL.fromEmail}) in ap-south-1. The To inbox does not need verification.`
+  }
+  return "Could not send right now. Try again."
 }

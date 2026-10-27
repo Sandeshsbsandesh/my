@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { useSearchParams } from "react-router-dom"
+import { motion, useReducedMotion } from "framer-motion"
 import { Check, Copy, Download } from "lucide-react"
 import { Button } from "../components/Button"
-import { StepFade } from "../components/motion"
+import { EASE, StepFade } from "../components/motion"
 import { SectionLabel } from "../components/SectionLabel"
 import {
   integrationOptions,
@@ -23,6 +24,7 @@ import {
   type Draft,
 } from "../lib/brief"
 import { cn } from "../lib/cn"
+import { scrollPage } from "../components/SmoothScroll"
 
 const stepLabels = ["Project", "Requirements", "Contact", "Review"]
 const DEADLINE_KEY = "zebriyo.preview.until"
@@ -70,6 +72,8 @@ export function StartPage() {
   const [copyFailed, setCopyFailed] = useState(false)
   const firstParam = useRef(true)
   const sending = useRef(false)
+  const skipScroll = useRef(true)
+  const formRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (sent) return
@@ -96,9 +100,19 @@ export function StartPage() {
   }, [typeParam, planParam])
 
   useEffect(() => {
-    if (step === 0 && !sent) return
-    if (window.innerWidth < 1024) {
-      document.getElementById("brief-form")?.scrollIntoView({ block: "start" })
+    if (skipScroll.current) {
+      skipScroll.current = false
+      return
+    }
+    const node = formRef.current
+    if (!node) return
+    let second = 0
+    const first = window.requestAnimationFrame(() => {
+      second = window.requestAnimationFrame(() => scrollPage(node, false, -80))
+    })
+    return () => {
+      window.cancelAnimationFrame(first)
+      window.cancelAnimationFrame(second)
     }
   }, [step, sent])
 
@@ -144,7 +158,7 @@ export function StartPage() {
       })
       const payload = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null
       if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error || "Could not send")
+        throw new Error(payload?.error || "Could not send your details.")
       }
       const until = Date.now() + HOLD_MS
       try {
@@ -158,12 +172,17 @@ export function StartPage() {
       setSent(true)
       setCopied(false)
       setCopyFailed(false)
-    } catch {
+    } catch (error) {
       sending.current = false
-      setSubmitError("We could not send your details. Check your connection and try again.")
+      setSubmitError(error instanceof Error && error.message ? error.message : "Could not send your details. Try again.")
     } finally {
       setSubmitting(false)
     }
+  }
+
+  function revealForm() {
+    const node = formRef.current
+    if (node) scrollPage(node, false, -88)
   }
 
   function onSubmit(event: FormEvent) {
@@ -171,7 +190,12 @@ export function StartPage() {
     if (step < 3) {
       const nextErrors = validateStep(step, draft)
       setErrors(nextErrors)
-      if (Object.keys(nextErrors).length === 0) setStep(step + 1)
+      if (Object.keys(nextErrors).length === 0) {
+        setStep(step + 1)
+        revealForm()
+      } else {
+        revealForm()
+      }
       return
     }
     const all = validateAll(draft)
@@ -203,9 +227,10 @@ export function StartPage() {
             ? "We have your details. Your first step towards scaling up starts within the next 24 hours."
             : "Tell us if you need a business website, Instagram website, influencer website, or portfolio. The price is fixed before you pay."}
         </p>
+        {sent ? null : <ReassureLine />}
       </div>
 
-      <div id="brief-form" className="scroll-mt-24 lg:col-span-7">
+      <div id="brief-form" ref={formRef} className="scroll-mt-24 lg:col-span-7">
         <StepFade id={sent ? "sent" : step}>
         {sent ? (
           <Success
@@ -235,28 +260,43 @@ export function StartPage() {
           <form noValidate autoComplete="on" onSubmit={onSubmit}>
             <p className="sr-only" aria-hidden="true">
               <label>
-                Website
-                <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+                Company fax
+                <input
+                  name="fax"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(event) => setHoneypot(event.target.value)}
+                />
               </label>
             </p>
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
               0{step + 1} / 04 <span className="ml-3 text-ink">{stepLabels[step]}</span>
             </p>
 
-            {step === 0 ? (
-              <ProjectStep draft={draft} errors={errors} update={update} />
-            ) : null}
-            {step === 1 ? <RequirementsStep draft={draft} errors={errors} update={update} /> : null}
-            {step === 2 ? <ContactStep draft={draft} errors={errors} update={update} /> : null}
-            {step === 3 ? <ReviewStep draft={draft} onEdit={setStep} /> : null}
+            <div className="mt-6">
+              {step === 0 ? (
+                <ProjectStep draft={draft} errors={errors} update={update} />
+              ) : null}
+              {step === 1 ? <RequirementsStep draft={draft} errors={errors} update={update} /> : null}
+              {step === 2 ? <ContactStep draft={draft} errors={errors} update={update} /> : null}
+              {step === 3 ? <ReviewStep draft={draft} onEdit={setStep} /> : null}
+            </div>
 
-            <p className="mt-8 text-sm text-muted">
+            <p className="mt-8 text-sm leading-relaxed text-muted">
               Sending delivers your details to Zebriyo. You get a working preview of the main page within 24 hours.
             </p>
             {submitError ? <p className="mt-3 text-sm text-accent">{submitError}</p> : null}
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3">
               {step > 0 ? (
-                <Button type="button" variant="secondary" onClick={() => setStep((value) => Math.max(0, value - 1))}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setStep((value) => Math.max(0, value - 1))
+                    revealForm()
+                  }}
+                >
                   Back
                 </Button>
               ) : null}
@@ -282,10 +322,20 @@ function ProjectStep({
   update: (patch: Partial<Draft>) => void
 }) {
   return (
-    <div>
-      <fieldset className="mt-8">
+    <div className="flex flex-col gap-7">
+      <Field label="Name of the business, channel, or product" required error={errors.projectName}>
+        <input
+          className={fieldClass(errors.projectName)}
+          value={draft.projectName}
+          maxLength={120}
+          autoComplete="organization"
+          placeholder="Enter name here"
+          onChange={(event) => update({ projectName: event.target.value })}
+        />
+      </Field>
+      <fieldset>
         <legend className="text-sm font-medium">What are we building?</legend>
-        <div className="mt-3 grid gap-2">
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
           {projectTypes.map((item) => {
             const selected = draft.type === item.id
             return (
@@ -299,12 +349,12 @@ function ProjectStep({
                 />
                 <span
                   className={cn(
-                    "block border px-4 py-3 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent",
+                    "flex h-full flex-col border px-4 py-3.5 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent",
                     selected ? "border-ink bg-white" : "border-line",
                   )}
                 >
                   <span className="block font-medium">{item.label}</span>
-                  <span className="block text-sm text-ink-soft">{item.detail}</span>
+                  <span className="mt-1 block text-sm leading-snug text-ink-soft">{item.detail}</span>
                 </span>
               </label>
             )
@@ -312,15 +362,6 @@ function ProjectStep({
         </div>
         {errors.type ? <p className="mt-2 text-sm text-accent">{errors.type}</p> : null}
       </fieldset>
-      <Field label="Name of the business, channel, or product" required error={errors.projectName}>
-        <input
-          className={fieldClass(errors.projectName)}
-          value={draft.projectName}
-          maxLength={120}
-          autoComplete="organization"
-          onChange={(event) => update({ projectName: event.target.value })}
-        />
-      </Field>
     </div>
   )
 }
@@ -335,7 +376,7 @@ function RequirementsStep({
   update: (patch: Partial<Draft>) => void
 }) {
   return (
-    <div>
+    <div className="flex flex-col gap-7">
       <Field label="What should the website do?" required error={errors.goal}>
         <textarea
           className={cn(fieldClass(errors.goal), "min-h-32 resize-y")}
@@ -398,7 +439,7 @@ function ContactStep({
   update: (patch: Partial<Draft>) => void
 }) {
   return (
-    <div>
+    <div className="flex flex-col gap-7">
       <Field label="Your name" required error={errors.name}>
         <input
           className={fieldClass(errors.name)}
@@ -435,7 +476,7 @@ function ContactStep({
           onChange={(event) => update({ whatsapp: event.target.value })}
         />
       </Field>
-      <fieldset className="mt-6">
+      <fieldset>
         <legend className="text-sm font-medium">How should we reply?</legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {(
@@ -473,7 +514,7 @@ function ReviewStep({ draft, onEdit }: { draft: Draft; onEdit: (step: number) =>
   const pages = pageOptions.filter((item) => draft.pages.includes(item.id)).map((item) => item.label)
   const tools = integrationOptions.filter((item) => draft.integrations.includes(item.id)).map((item) => item.label)
   return (
-    <div className="mt-8">
+    <div className="flex flex-col gap-8">
       <ReviewBlock title="Project" onEdit={() => onEdit(0)}>
         <Row label="Type" value={type} />
         <Row label="Name" value={draft.projectName} />
@@ -586,6 +627,34 @@ function Success({
   )
 }
 
+function ReassureLine() {
+  const reduce = useReducedMotion()
+  const lines = [
+    "Don’t worry.",
+    "We don’t call you unnecessarily.",
+    "Our next meeting will be showing you the first view of your website.",
+  ]
+  if (reduce) {
+    return <p className="mt-4 max-w-md font-semibold text-ink">{lines.join(" ")}</p>
+  }
+  return (
+    <p className="mt-4 max-w-md font-semibold text-ink">
+      {lines.map((line, index) => (
+        <span key={line} className="block overflow-hidden pb-0.5">
+          <motion.span
+            className="block"
+            initial={{ y: "108%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.72, delay: 0.38 + index * 0.14, ease: EASE }}
+          >
+            {line}
+          </motion.span>
+        </span>
+      ))}
+    </p>
+  )
+}
+
 function Field({
   label,
   required,
@@ -598,19 +667,19 @@ function Field({
   children: ReactNode
 }) {
   return (
-    <label className="mt-7 block">
+    <label className="block">
       <span className="text-sm font-medium">
         {label}
-        {required ? <span className="font-normal text-muted"> · Required</span> : null}
+        {required ? <span className="ml-2 font-normal text-muted">Required</span> : null}
       </span>
       {children}
-      {error ? <span className="mt-1 block text-sm text-accent">{error}</span> : null}
+      {error ? <span className="mt-1.5 block text-sm text-accent">{error}</span> : null}
     </label>
   )
 }
 
 function fieldClass(error?: string) {
-  return cn("mt-2 w-full border-b bg-transparent py-3", error ? "border-accent" : "border-line")
+  return cn("mt-2.5 w-full border-b bg-transparent py-2.5 text-base outline-none placeholder:text-muted/80", error ? "border-accent" : "border-line")
 }
 
 function ChipGroup({
@@ -625,7 +694,7 @@ function ChipGroup({
   onToggle: (id: string) => void
 }) {
   return (
-    <fieldset className="mt-7">
+    <fieldset>
       <legend className="text-sm font-medium">{legend}</legend>
       <div className="mt-3 flex flex-wrap gap-2">
         {options.map((option) => {
@@ -651,7 +720,7 @@ function ChipGroup({
 
 function ReviewBlock({ title, onEdit, children }: { title: string; onEdit: () => void; children: ReactNode }) {
   return (
-    <section className="mt-8">
+    <section>
       <div className="flex items-center justify-between gap-4">
         <h2 className="font-serif text-2xl">{title}</h2>
         <button type="button" className="cursor-pointer text-sm underline underline-offset-4" onClick={onEdit}>

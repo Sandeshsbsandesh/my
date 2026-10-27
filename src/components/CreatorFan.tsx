@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { publicUrl } from "../lib/publicUrl"
 
@@ -212,17 +212,36 @@ const thumbs = [
 export function CreatorFan() {
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
+  const [inView, setInView] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const wasInView = useRef(false)
 
   useEffect(() => {
-    if (reduce) return
+    const node = rootRef.current
+    if (!node) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const seen = entry.isIntersecting && entry.intersectionRatio >= 0.28
+        if (seen && !wasInView.current) setActive(0)
+        wasInView.current = seen
+        setInView(seen)
+      },
+      { threshold: [0, 0.28, 1] },
+    )
+    io.observe(node)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (reduce || !inView) return
     const timer = window.setInterval(() => setActive((current) => (current + 1) % pages.length), 3400)
     return () => window.clearInterval(timer)
-  }, [reduce, active])
+  }, [reduce, active, inView])
 
   const Page = pages[active]
 
   return (
-    <div className="bg-[#f5c400]">
+    <div ref={rootRef} className="bg-[#f5c400]">
       <div className="relative h-[440px] overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div

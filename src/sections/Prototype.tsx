@@ -5,7 +5,7 @@ import { prototypeNeeds } from "../data/site"
 
 export function Prototype() {
   return (
-    <section id="prototype" className="bg-night text-paper">
+    <section id="prototype" className="scroll-mt-24 bg-night text-paper">
       <div className="wrap grid items-start gap-10 py-12 sm:py-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <Reveal>

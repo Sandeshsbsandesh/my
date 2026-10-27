@@ -4,7 +4,7 @@ import { Outlet, useLocation } from "react-router-dom"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 import { EASE } from "./motion"
-import { scrollPage, SmoothScroll } from "./SmoothScroll"
+import { scrollPage, scrollToHash, SmoothScroll } from "./SmoothScroll"
 
 export function Layout() {
   const { pathname, hash } = useLocation()
@@ -16,13 +16,7 @@ export function Layout() {
   }, [])
 
   useEffect(() => {
-    if (hash) {
-      const el = document.getElementById(hash.slice(1))
-      if (el) {
-        scrollPage(el, true)
-        return
-      }
-    }
+    if (hash) return scrollToHash(hash)
     scrollPage(0, true)
   }, [pathname, hash])
 

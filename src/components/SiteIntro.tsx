@@ -32,8 +32,8 @@ function schedule() {
     words.push(row)
     cursor += LINE_GAP
   }
-  const revealAt = cursor + 550
-  return { words, revealAt, heroAt: revealAt + 80 }
+  const revealAt = cursor + 280
+  return { words, revealAt, heroAt: revealAt }
 }
 
 const PLAN = schedule()
@@ -74,7 +74,7 @@ export function SiteIntro({ onHero, onDone }: { onHero: () => void; onDone: () =
 
   useEffect(() => {
     document.body.classList.add("site-intro-on")
-    const fade = window.setTimeout(() => setDim(true), revealAt - 380)
+    const fade = window.setTimeout(() => setDim(true), Math.max(0, revealAt - 220))
     const reveal = window.setTimeout(() => {
       const nodes = [...document.querySelectorAll<HTMLElement>(".site-intro-tilt")]
       const target = document.querySelector<HTMLElement>(".hero-lift")
@@ -89,7 +89,7 @@ export function SiteIntro({ onHero, onDone }: { onHero: () => void; onDone: () =
       setOpen(true)
     }, revealAt)
     const hero = window.setTimeout(onHero, heroAt)
-    const done = window.setTimeout(onDone, revealAt + 1500)
+    const done = window.setTimeout(onDone, revealAt + 520)
     return () => {
       window.clearTimeout(fade)
       window.clearTimeout(reveal)

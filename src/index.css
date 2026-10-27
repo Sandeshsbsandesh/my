@@ -466,6 +466,11 @@
     padding-bottom: 0.14em;
   }
 
+  .hero-line:has(.hero-ice) > span {
+    transition-duration: 0.4s;
+    transition-delay: 0s;
+  }
+
   .hero-line > span {
     display: block;
     transform: translateY(108%);
@@ -565,19 +570,19 @@
   }
 
   .hero-ready .hero-swap {
-    animation: hero-swap-tighten 0.45s ease 2.7s both;
+    animation: hero-swap-tighten 0.45s ease 1.05s both;
   }
 
   .hero-ready .hero-swap-out::after {
-    animation: hero-strike 0.42s cubic-bezier(0.77, 0, 0.18, 1) 2.15s both;
+    animation: hero-strike 0.42s cubic-bezier(0.77, 0, 0.18, 1) 0.5s both;
   }
 
   .hero-ready .hero-swap-out {
-    animation: hero-swap-leave 0.3s ease 2.65s both;
+    animation: hero-swap-leave 0.3s ease 1s both;
   }
 
   .hero-ready .hero-swap-in .hero-ice-letter {
-    animation-delay: calc(2.75s + var(--n) * 0.1s);
+    animation-delay: calc(1.1s + var(--n) * 0.1s);
   }
 
   .hero-loader {

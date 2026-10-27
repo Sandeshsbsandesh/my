@@ -1,87 +1,118 @@
+import { motion, useReducedMotion } from "framer-motion"
 import { Link } from "react-router-dom"
-import { MaskHeading, Reveal } from "../components/motion"
+import { MaskHeading, Reveal, EASE } from "../components/motion"
 import { SectionLabel } from "../components/SectionLabel"
 import { audiences, sectors } from "../data/seo"
 
+const WIPE = {
+  left: { clipPath: "inset(0 100% 0 0)", x: -28, y: 0 },
+  right: { clipPath: "inset(0 0 0 100%)", x: 28, y: 0 },
+  up: { clipPath: "inset(0 0 100% 0)", x: 0, y: -22 },
+  down: { clipPath: "inset(100% 0 0 0)", x: 0, y: 22 },
+} as const
+
+const WIPE_DIRS = ["left", "up", "right", "down"] as const
+const WIPE_SHOWN = { clipPath: "inset(0% 0% 0% 0%)", x: 0, y: 0 }
+const WIPE_EASE = [0.77, 0, 0.18, 1] as const
+
+const FOLD_HIDDEN = { clipPath: "inset(0 0 0 100%)", x: 36, opacity: 0 }
+const FOLD_SHOWN = { clipPath: "inset(0% 0% 0% 0%)", x: 0, opacity: 1 }
+
 export function Audiences() {
+  const reduce = useReducedMotion()
   return (
     <>
-      <section id="make" className="bg-paper">
+      <section id="make" className="scroll-mt-24 overflow-hidden bg-paper-2">
         <div className="wrap py-12 sm:py-16">
           <Reveal>
             <SectionLabel>Who it’s for</SectionLabel>
           </Reveal>
-          <MaskHeading className="mt-4 max-w-[18ch] font-serif text-[clamp(2.1rem,4vw,3.4rem)] leading-[0.96] tracking-[-0.03em]">
-            Affordable website maker for businesses, Instagram, and portfolios.
+          <MaskHeading className="mt-2 font-serif text-[clamp(1.85rem,3vw,2.6rem)] leading-[0.98] tracking-[-0.03em]">
+            Affordable website maker
+            <br />
+            for businesses, Instagram, and portfolios.
           </MaskHeading>
-          <Reveal delay={0.08}>
-            <p className="mt-5 max-w-2xl text-ink-soft">
-              Zebriyo is an affordable website maker. We build business websites, Instagram websites, influencer
-              websites, and portfolio websites. You send your details. You get a working preview the next day. Monthly
-              care starts at ₹1,999. A new Basic site starts at ₹9,999.
+          <Reveal delay={0.06}>
+            <p className="mt-3 max-w-xl text-base text-ink-soft">
+              Preview the next day. Care from ₹1,999 a month.
             </p>
           </Reveal>
-          <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.ul
+            className="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
+            initial={reduce ? "show" : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: reduce ? 0 : 0.14, delayChildren: reduce ? 0 : 0.06 } },
+            }}
+          >
             {audiences.map((item, index) => (
-              <Reveal as="li" key={item.id} delay={Math.min(index, 4) * 0.05}>
-                <h3 className="font-serif text-[1.35rem] leading-tight">{item.title}</h3>
-                <p className="mt-2 text-sm text-ink-soft">{item.text}</p>
-              </Reveal>
+              <motion.li
+                key={item.id}
+                className="overflow-hidden border-t border-ink/15 pt-4"
+                variants={{ hidden: WIPE[WIPE_DIRS[index % WIPE_DIRS.length]], show: WIPE_SHOWN }}
+                transition={{ duration: reduce ? 0 : 0.55, ease: WIPE_EASE }}
+              >
+                <span className="font-serif text-xl italic text-accent">{String(index + 1).padStart(2, "0")}</span>
+                <h3 className="mt-2 font-serif text-[1.45rem] leading-tight">{item.title}</h3>
+                <p className="mt-1 text-sm text-ink-soft">{item.text}</p>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </div>
       </section>
-      <section id="sectors" className="bg-paper-2">
+
+      <section id="sectors" className="overflow-hidden bg-night text-paper">
         <div className="wrap py-12 sm:py-16">
           <Reveal>
-            <SectionLabel>Sectors</SectionLabel>
+            <SectionLabel tone="paper">Sectors</SectionLabel>
           </Reveal>
-          <MaskHeading className="mt-4 max-w-[18ch] font-serif text-[clamp(2.1rem,4vw,3.4rem)] leading-[0.96] tracking-[-0.03em]">
+          <MaskHeading className="mt-2 max-w-[18ch] font-serif text-[clamp(1.85rem,3vw,2.6rem)] leading-[0.98] tracking-[-0.03em]">
             CA, CS, hotels, NGOs, schools, colleges, clinics.
           </MaskHeading>
           <Reveal delay={0.06}>
-            <p className="mt-4 max-w-2xl text-ink-soft">
-              Same process for every sector: send your details, see a preview in 24 hours, change it by message. Hotel
-              and clinic samples are on the work page. Those samples are not client projects.
+            <p className="mt-3 max-w-xl text-base text-paper/75">
+              Same 24-hour preview. Hotel and clinic samples on the work page.
             </p>
           </Reveal>
-          <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <motion.ul
+            className="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-4"
+            initial={reduce ? "show" : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: reduce ? 0 : 0.16, delayChildren: reduce ? 0 : 0.1 } },
+            }}
+          >
             {sectors.map((item, index) => (
-              <Reveal as="li" key={item.id} delay={Math.min(index, 4) * 0.05}>
-                <h3 className="font-serif text-[1.35rem] leading-tight">{item.title}</h3>
-                <p className="mt-2 text-sm text-ink-soft">{item.text}</p>
+              <motion.li
+                key={item.id}
+                className="relative overflow-hidden border-t border-paper/15 pt-4 pl-4"
+                variants={{ hidden: FOLD_HIDDEN, show: FOLD_SHOWN }}
+                transition={{ duration: reduce ? 0 : 0.7, ease: EASE }}
+              >
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute bottom-0 left-0 top-4 w-px origin-top bg-accent"
+                  variants={{ hidden: { scaleY: 0 }, show: { scaleY: 1 } }}
+                  transition={{ duration: reduce ? 0 : 0.55, ease: EASE }}
+                />
+                <p className="font-serif text-xl italic text-accent">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="mt-2 font-serif text-[1.45rem] leading-tight">{item.title}</h3>
+                <p className="mt-1 text-sm text-paper/70">{item.text}</p>
                 {"href" in item && item.href ? (
                   <Link
                     to={item.href}
-                    className="mt-3 inline-block text-sm text-ink-soft underline decoration-line underline-offset-4 hover:text-ink"
+                    className="mt-2 inline-block text-sm text-paper/80 underline decoration-paper/30 underline-offset-4 hover:text-paper"
                   >
                     Open sample
                   </Link>
                 ) : null}
-              </Reveal>
+              </motion.li>
             ))}
-          </ul>
-          <Reveal delay={0.12}>
-            <p className="mt-10 max-w-2xl text-sm text-muted">
-              Looking for an{" "}
-              <Link to="/work?preview=hotel" className="text-ink-soft underline decoration-line underline-offset-4 hover:text-ink">
-                hotel website
-              </Link>
-              , a{" "}
-              <Link to="/work?preview=clinic" className="text-ink-soft underline decoration-line underline-offset-4 hover:text-ink">
-                clinic website
-              </Link>
-              , a{" "}
-              <Link to="/#make" className="text-ink-soft underline decoration-line underline-offset-4 hover:text-ink">
-                cool animated website
-              </Link>
-              , or an{" "}
-              <Link to="/start" className="text-ink-soft underline decoration-line underline-offset-4 hover:text-ink">
-                NGO, school, or CA site
-              </Link>
-              ? Send your details and see the layout before you pay.
-            </p>
-          </Reveal>
+          </motion.ul>
         </div>
       </section>
     </>

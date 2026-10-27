@@ -1,4 +1,4 @@
-import { formatMail, mailSubject, parseDraft } from "../_lib/mail-config.js"
+import { formatMail, mailError, mailSubject, parseDraft } from "../_lib/mail-config.js"
 import { sendSmtp } from "../_lib/smtp-cloudflare.js"
 
 function json(status, body) {
@@ -36,6 +36,6 @@ export async function onRequest(context) {
     return json(200, { ok: true })
   } catch (error) {
     console.error("preview mail failed", error)
-    return json(502, { ok: false, error: "Could not send right now. Try again." })
+    return json(502, { ok: false, error: mailError(error) })
   }
 }

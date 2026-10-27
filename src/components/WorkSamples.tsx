@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { publicUrl } from "../lib/publicUrl"
 
@@ -7,12 +7,33 @@ const EASE = [0.22, 1, 0.36, 1] as const
 function useCycle(count: number) {
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
+  const [inView, setInView] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const wasInView = useRef(false)
+
   useEffect(() => {
-    if (reduce || count < 2) return
+    const node = rootRef.current
+    if (!node) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const seen = entry.isIntersecting && entry.intersectionRatio >= 0.28
+        if (seen && !wasInView.current) setActive(0)
+        wasInView.current = seen
+        setInView(seen)
+      },
+      { threshold: [0, 0.28, 1] },
+    )
+    io.observe(node)
+    return () => io.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (reduce || !inView || count < 2) return
     const timer = window.setInterval(() => setActive((current) => (current + 1) % count), 3400)
     return () => window.clearInterval(timer)
-  }, [reduce, active, count])
-  return { active, setActive, reduce }
+  }, [reduce, active, count, inView])
+
+  return { active, setActive, reduce, rootRef }
 }
 
 function Stage({
@@ -24,10 +45,10 @@ function Stage({
   labels: { label: string; wash: string; ink: string }[]
   ground: string
 }) {
-  const { active, setActive, reduce } = useCycle(pages.length)
+  const { active, setActive, reduce, rootRef } = useCycle(pages.length)
   const Page = pages[active]
   return (
-    <div style={{ background: ground }}>
+    <div ref={rootRef} style={{ background: ground }}>
       <div className="relative h-[420px] overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div

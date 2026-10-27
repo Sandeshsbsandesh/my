@@ -35,47 +35,47 @@ export const audiences = [
   {
     id: "affordable",
     title: "Affordable website maker",
-    text: "Fixed prices, no hourly meter. Monthly care starts at ₹1,999. A new Basic website starts at ₹9,999. You see the price before you pay.",
+    text: "From ₹1,999/month.",
   },
   {
     id: "business",
     title: "Business websites",
-    text: "Shops, clinics, hotels, studios, and services. The site lists what you do, where you are, and how to enquire, book, or buy.",
+    text: "Shops, clinics, hotels, studios.",
   },
   {
     id: "instagram",
     title: "Instagram websites",
-    text: "For creators who have outgrown a link-in-bio page. A real Instagram website for your name, work, views, and enquiries.",
+    text: "More than a link in bio.",
   },
   {
     id: "influencer",
     title: "Influencer websites",
-    text: "An influencer website you own when the app changes. Media kits, brand work, and a contact path that is not rented from a profile.",
+    text: "A site you own.",
   },
   {
     id: "portfolio",
     title: "Portfolio makers",
-    text: "A clean portfolio website for photographers, designers, writers, and creators. The work first, then a way to get in touch.",
+    text: "The work, then contact.",
   },
   {
     id: "startup",
     title: "Startup websites",
-    text: "A home for a new product. Visitors should know what it is, who it is for, and what to do next without a sales call.",
+    text: "Product, audience, one next step.",
   },
   {
     id: "landing",
     title: "Landing pages",
-    text: "One offer, one action. A landing page for a launch, a campaign, or a single service that does not need a whole site around it.",
+    text: "One offer. One action.",
   },
   {
     id: "cheap",
-    title: "Cheap website maker, done properly",
-    text: "If you are searching for a cheap website maker, start with Starter Care at ₹1,999 a month. The site still has to look like a real business.",
+    title: "Cheap website maker",
+    text: "Starter Care at ₹1,999/month.",
   },
   {
     id: "animated",
-    title: "Animated, best-looking websites",
-    text: "People look for the coolest website, the best looking website, the best animated website. Zebriyo designs motion and layout so the site looks expensive without an agency wait.",
+    title: "Animated websites",
+    text: "The coolest look, without the wait.",
   },
 ] as const
 
@@ -83,43 +83,43 @@ export const sectors = [
   {
     id: "ca",
     title: "CA websites",
-    text: "Chartered accountant websites for firms and practitioners. Services, team, and a clear way for clients to enquire.",
+    text: "Firm, services, enquire.",
   },
   {
     id: "cs",
     title: "CS websites",
-    text: "Company secretary websites that explain filings, retainers, and how a business can get in touch.",
+    text: "Filings, retainers, contact.",
   },
   {
     id: "startups",
     title: "Startup websites",
-    text: "A startup website that states the product, who it is for, and the one next step — without a long sales deck.",
+    text: "Product and one next step.",
   },
   {
     id: "hotels",
     title: "Hotel websites",
-    text: "Hotel websites with rooms, stay dates, and book now. See a sample hotel layout on the work page.",
+    text: "Rooms and book now.",
     href: "/work?preview=hotel",
   },
   {
     id: "ngo",
-    title: "NGO website makers",
-    text: "NGO websites for the mission, programmes, donate or volunteer, and a contact path that is easy on a phone.",
+    title: "NGO websites",
+    text: "Mission, donate, volunteer.",
   },
   {
     id: "school",
     title: "School websites",
-    text: "School websites for admissions, notices, events, and a way for parents to reach the office.",
+    text: "Admissions and notices.",
   },
   {
     id: "college",
     title: "College websites",
-    text: "College websites for courses, campus, admissions, and enquiries. Clear on desktop and on a phone.",
+    text: "Courses and enquiries.",
   },
   {
     id: "clinic",
     title: "Clinic websites",
-    text: "Clinic websites with services, doctors, and book appointment. See a sample clinic layout on the work page.",
+    text: "Doctors and book appointment.",
     href: "/work?preview=clinic",
   },
 ] as const
