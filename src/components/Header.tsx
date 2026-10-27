@@ -49,7 +49,7 @@ export function Header() {
       )}
     >
       <div className="wrap flex h-16 items-center justify-between gap-4">
-        <Link to="/" aria-label="Briefly, home">
+        <Link to="/" aria-label="Zebriyo, home">
           <Logo />
         </Link>
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">

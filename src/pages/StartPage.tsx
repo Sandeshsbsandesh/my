@@ -9,17 +9,15 @@ import {
   isProjectType,
   pageOptions,
   projectTypes,
-  site,
   timingOptions,
-  whatsappHref,
 } from "../data/site"
-import { usePageTitle } from "../hooks/usePageTitle"
+import { Seo } from "../components/Seo"
+import { startJsonLd } from "../data/seo"
 import {
   STORAGE_KEY,
   draftFromStorage,
   emptyDraft,
   formatBrief,
-  mailtoHref,
   validateAll,
   validateStep,
   type Draft,
@@ -27,13 +25,28 @@ import {
 import { cn } from "../lib/cn"
 
 const stepLabels = ["Project", "Requirements", "Contact", "Review"]
+const DEADLINE_KEY = "zebriyo.preview.until"
+const HOLD_MS = 24 * 60 * 60 * 1000
+
+function readDeadline() {
+  try {
+    const until = Number(sessionStorage.getItem(DEADLINE_KEY) || 0)
+    return until > Date.now() ? until : 0
+  } catch {
+    return 0
+  }
+}
+
+function previewApiUrl() {
+  return new URL("api/preview", `${window.location.origin}${import.meta.env.BASE_URL}`).toString()
+}
 
 function toggle(list: string[], id: string) {
   return list.includes(id) ? list.filter((item) => item !== id) : [...list, id]
 }
 
 export function StartPage() {
-  usePageTitle("Get my preview — Briefly")
+  const jsonLd = startJsonLd()
   const [params] = useSearchParams()
   const typeParam = params.get("type")
   const planParam = params.get("plan")
@@ -47,7 +60,11 @@ export function StartPage() {
   })
   const [step, setStep] = useState(0)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [sent, setSent] = useState(false)
+  const [deadline, setDeadline] = useState(readDeadline)
+  const [sent, setSent] = useState(() => readDeadline() > 0)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+  const [honeypot, setHoneypot] = useState("")
   const [briefText, setBriefText] = useState("")
   const [copied, setCopied] = useState(false)
   const [copyFailed, setCopyFailed] = useState(false)
@@ -114,23 +131,38 @@ export function StartPage() {
     }
   }
 
-  function send() {
+  async function send() {
     if (sending.current) return
     sending.current = true
-    const text = formatBrief(draft)
-    sessionStorage.removeItem(STORAGE_KEY)
-    setBriefText(text)
-    setSent(true)
-    setCopied(false)
-    void navigator.clipboard.writeText(text).then(
-      () => setCopied(true),
-      () => setCopyFailed(true),
-    )
-    const href = mailtoHref(draft, text)
-    if (href) {
-      const link = document.createElement("a")
-      link.href = href
-      link.click()
+    setSubmitting(true)
+    setSubmitError("")
+    try {
+      const response = await fetch(previewApiUrl(), {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...draft, website: honeypot }),
+      })
+      const payload = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || "Could not send")
+      }
+      const until = Date.now() + HOLD_MS
+      try {
+        sessionStorage.setItem(DEADLINE_KEY, String(until))
+        sessionStorage.removeItem(STORAGE_KEY)
+      } catch {
+        // Private mode still shows the thank-you state for this visit.
+      }
+      setBriefText(formatBrief(draft))
+      setDeadline(until)
+      setSent(true)
+      setCopied(false)
+      setCopyFailed(false)
+    } catch {
+      sending.current = false
+      setSubmitError("We could not send your details. Check your connection and try again.")
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -148,22 +180,28 @@ export function StartPage() {
       setStep(all.type || all.projectName ? 0 : all.goal ? 1 : 2)
       return
     }
-    send()
+    void send()
   }
 
   const forwardLabel = ["Continue", "Continue", "Review details", "Send my details"][step]
 
   return (
     <div className="wrap grid gap-8 py-8 sm:py-10 lg:grid-cols-12 lg:gap-10">
+      <Seo
+        title="Get a Website Preview in 24 Hours | Zebriyo"
+        description="Send your details to Zebriyo, an affordable website maker for business, Instagram, influencer, and portfolio websites. Preview of the main page in 24 hours. Care from ₹1,999/month."
+        path="/start"
+        jsonLd={jsonLd}
+      />
       <div className="lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
         <SectionLabel>Get my preview</SectionLabel>
         <h1 className="mt-4 font-serif text-[clamp(2.4rem,4vw,3.6rem)] leading-[0.96] tracking-[-0.03em]">
-          {sent ? "Your details are ready." : "Send your details."}
+          {sent ? "Thank you." : "Send your details."}
         </h1>
         <p className="mt-4 max-w-md text-ink-soft">
           {sent
-            ? "Nothing on this page was stored on a server. Copy it, download it, or send it from your email app."
-            : "Tell us what the site is for. The price is fixed before you pay."}
+            ? "We have your details. Your first step towards scaling up starts within the next 24 hours."
+            : "Tell us if you need a business website, Instagram website, influencer website, or portfolio. The price is fixed before you pay."}
         </p>
       </div>
 
@@ -171,17 +209,22 @@ export function StartPage() {
         <StepFade id={sent ? "sent" : step}>
         {sent ? (
           <Success
+            deadline={deadline}
             text={briefText}
             copied={copied}
             copyFailed={copyFailed}
             onCopy={() => void copy()}
             onDownload={download}
-            email={site.email}
-            whatsapp={whatsappHref(briefText)}
             onReset={() => {
+              try {
+                sessionStorage.removeItem(DEADLINE_KEY)
+              } catch {
+                // Ignore storage failures.
+              }
               setDraft(emptyDraft())
               setStep(0)
               setSent(false)
+              setDeadline(0)
               setBriefText("")
               setCopied(false)
               setCopyFailed(false)
@@ -190,6 +233,12 @@ export function StartPage() {
           />
         ) : (
           <form noValidate autoComplete="on" onSubmit={onSubmit}>
+            <p className="sr-only" aria-hidden="true">
+              <label>
+                Website
+                <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+              </label>
+            </p>
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
               0{step + 1} / 04 <span className="ml-3 text-ink">{stepLabels[step]}</span>
             </p>
@@ -202,16 +251,18 @@ export function StartPage() {
             {step === 3 ? <ReviewStep draft={draft} onEdit={setStep} /> : null}
 
             <p className="mt-8 text-sm text-muted">
-              Kept in this tab until you send it or close the tab. Not stored on a server.
-              {site.email ? ` Sending opens your email app, addressed to ${site.email}.` : ""}
+              Sending delivers your details to Zebriyo. You get a working preview of the main page within 24 hours.
             </p>
+            {submitError ? <p className="mt-3 text-sm text-accent">{submitError}</p> : null}
             <div className="mt-6 flex flex-wrap gap-3">
               {step > 0 ? (
                 <Button type="button" variant="secondary" onClick={() => setStep((value) => Math.max(0, value - 1))}>
                   Back
                 </Button>
               ) : null}
-              <Button type="submit">{forwardLabel}</Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Sending…" : forwardLabel}
+              </Button>
             </div>
           </form>
         )}
@@ -445,51 +496,89 @@ function ReviewStep({ draft, onEdit }: { draft: Draft; onEdit: (step: number) =>
   )
 }
 
+function pad(value: number) {
+  return String(value).padStart(2, "0")
+}
+
+function PreviewCountdown({ deadline }: { deadline: number }) {
+  const [left, setLeft] = useState(() => Math.max(0, deadline - Date.now()))
+
+  useEffect(() => {
+    const tick = () => setLeft(Math.max(0, deadline - Date.now()))
+    tick()
+    const id = window.setInterval(tick, 250)
+    return () => window.clearInterval(id)
+  }, [deadline])
+
+  const total = Math.floor(left / 1000)
+  const hours = Math.floor(total / 3600)
+  const minutes = Math.floor((total % 3600) / 60)
+  const seconds = total % 60
+
+  if (left <= 0) {
+    return (
+      <p className="mt-6 font-serif text-[clamp(1.8rem,3vw,2.6rem)] leading-tight tracking-[-0.03em]">
+        Your first step towards scaling up has started.
+      </p>
+    )
+  }
+
+  return (
+    <div className="mt-6">
+      <p className="text-sm font-medium uppercase tracking-[0.16em] text-muted">Your first step towards scaling up starts within</p>
+      <p className="mt-3 font-serif text-[clamp(2.8rem,8vw,4.6rem)] leading-none tracking-[-0.04em] tabular-nums">
+        <span>{pad(hours)}</span>
+        <span className="mx-1 text-accent">:</span>
+        <span>{pad(minutes)}</span>
+        <span className="mx-1 text-accent">:</span>
+        <span>{pad(seconds)}</span>
+      </p>
+      <p className="mt-3 text-sm text-muted">Hours : minutes : seconds</p>
+    </div>
+  )
+}
+
 function Success({
+  deadline,
   text,
   copied,
   copyFailed,
   onCopy,
   onDownload,
-  email,
-  whatsapp,
   onReset,
 }: {
+  deadline: number
   text: string
   copied: boolean
   copyFailed: boolean
   onCopy: () => void
   onDownload: () => void
-  email: string
-  whatsapp: string
   onReset: () => void
 }) {
   return (
     <div>
-      <p className="text-sm text-ink-soft">
-        {email
-          ? "Your email app should open with this brief. If it doesn’t, copy the text below."
-          : "Copy or download this brief and send it to us."}
+      <p className="text-ink-soft">
+        Thank you. We received your details. Sit tight — your first preview is on the way.
       </p>
-      <div className="mt-5 flex flex-wrap gap-3">
-        <Button type="button" onClick={onCopy}>
-          {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
-          {copied ? "Copied" : "Copy brief"}
-        </Button>
-        <Button type="button" variant="secondary" onClick={onDownload}>
-          <Download className="size-4" aria-hidden="true" />
-          Download .txt
-        </Button>
-        {whatsapp ? (
-          <Button href={whatsapp} variant="secondary">
-            Send on WhatsApp
-          </Button>
-        ) : null}
-      </div>
-      {copyFailed ? <p className="mt-3 text-sm text-accent">Select the brief below and copy it manually.</p> : null}
-      <pre className="mt-6 max-h-96 overflow-auto whitespace-pre-wrap break-words border border-line bg-foam p-4 font-mono text-sm">
-        {text}
-      </pre>
+      <PreviewCountdown deadline={deadline} />
+      {text ? (
+        <>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button type="button" variant="secondary" onClick={onCopy}>
+              {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
+              {copied ? "Copied" : "Copy your details"}
+            </Button>
+            <Button type="button" variant="secondary" onClick={onDownload}>
+              <Download className="size-4" aria-hidden="true" />
+              Download .txt
+            </Button>
+          </div>
+          {copyFailed ? <p className="mt-3 text-sm text-accent">Select the brief below and copy it manually.</p> : null}
+          <pre className="mt-6 max-h-64 overflow-auto whitespace-pre-wrap break-words border border-line bg-foam p-4 font-mono text-sm">
+            {text}
+          </pre>
+        </>
+      ) : null}
       <button type="button" className="mt-6 cursor-pointer text-sm underline underline-offset-4" onClick={onReset}>
         Start another brief
       </button>

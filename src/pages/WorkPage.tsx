@@ -6,15 +6,21 @@ import { Mockup } from "../components/Mockups"
 import { Reveal } from "../components/motion"
 import { SectionLabel } from "../components/SectionLabel"
 import { findSamplePreview, samplePreviews } from "../data/previews"
-import { usePageTitle } from "../hooks/usePageTitle"
+import { Seo } from "../components/Seo"
+import { previewSeo, workJsonLd } from "../data/seo"
 import { works } from "../data/site"
 import { cn } from "../lib/cn"
 import { Closing } from "../sections/Closing"
 
 export function WorkPage() {
-  usePageTitle("Work — Briefly")
   const [params] = useSearchParams()
   const opened = findSamplePreview(params.get("preview"))
+  const extra = opened ? previewSeo[opened.id] : undefined
+  const title = extra?.title ?? "Instagram, Business & Portfolio Website Examples | Zebriyo"
+  const description =
+    extra?.description ??
+    "Sample business websites, Instagram websites, influencer websites, boutique, clinic, hotel, and portfolio layouts from Zebriyo. Placeholder examples, not client projects."
+  const path = opened ? `/work?preview=${opened.id}` : "/work"
 
   useEffect(() => {
     if (!opened) return
@@ -23,14 +29,16 @@ export function WorkPage() {
 
   return (
     <>
+      <Seo title={title} description={description} path={path} jsonLd={workJsonLd()} />
       <Reveal className="wrap pb-6 pt-8 sm:pt-10">
         <SectionLabel>Example layouts</SectionLabel>
-        <h1 className="mt-4 max-w-[12ch] font-serif text-[clamp(2.6rem,5vw,4.6rem)] leading-[0.95] tracking-[-0.03em]">
-          The kinds of sites we build.
+        <h1 className="mt-4 max-w-[16ch] font-serif text-[clamp(2.6rem,5vw,4.6rem)] leading-[0.95] tracking-[-0.03em]">
+          Business, Instagram, influencer, and portfolio websites.
         </h1>
         <p className="mt-5 max-w-xl text-ink-soft">
-          These are sample layouts with placeholder names. They show the shape of a creator site, a startup, a business,
-          a landing page, and a revamp. They are not client projects and they are not results.
+          These are sample layouts with placeholder names. They show the shape of an Instagram website, an influencer
+          website, a business website, a portfolio, a startup, a landing page, and a revamp. They are not client
+          projects and they are not results.
         </p>
       </Reveal>
       {opened ? (

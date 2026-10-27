@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "framer-motion"
 import { SiteIntro } from "../components/SiteIntro"
-import { usePageTitle } from "../hooks/usePageTitle"
+import { Seo } from "../components/Seo"
+import { homeJsonLd, HOME_DESCRIPTION, HOME_TITLE } from "../data/seo"
 import { Closing } from "../sections/Closing"
 import { Faq } from "../sections/Faq"
 import { Hero } from "../sections/Hero"
 import { PreviewRibbon } from "../sections/PreviewRibbon"
+import { Audiences } from "../sections/Audiences"
 import { Offerings } from "../sections/Offerings"
 import { Pricing } from "../sections/Pricing"
 import { Process } from "../sections/Process"
@@ -18,7 +20,7 @@ function embedIntro() {
 }
 
 export function HomePage() {
-  usePageTitle("Briefly — Your coolest website, without the hassle")
+  const jsonLd = homeJsonLd()
   const reduce = useReducedMotion()
   const embedded = useRef(embedIntro()).current
   const [armed, setArmed] = useState(false)
@@ -35,9 +37,11 @@ export function HomePage() {
 
   return (
     <>
+      <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} path="/" jsonLd={jsonLd} />
       <Hero hold={!embedded && !armed} embed={embedded} />
       {showIntro && !reduce ? <SiteIntro onHero={startHero} onDone={finishIntro} /> : null}
       <PreviewRibbon />
+      <Audiences />
       <Promises />
       <Prototype />
       <Offerings />

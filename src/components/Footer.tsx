@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { footerNav, site, whatsappHref } from "../data/site"
+import { footerNav, footerServices, site, whatsappHref } from "../data/site"
 import { Logo } from "./Logo"
 
 export function Footer() {
@@ -7,10 +7,10 @@ export function Footer() {
   return (
     <footer className="border-t border-line bg-paper">
       <div className="wrap grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="lg:col-span-2">
-          <Logo />
+        <div>
+          <Logo size="footer" />
           <p className="mt-4 max-w-xs text-sm text-ink-soft">
-            Websites for creators, startups, and businesses.
+            Affordable website maker for business websites, Instagram websites, influencer websites, and portfolios.
           </p>
         </div>
         <div>
@@ -18,6 +18,18 @@ export function Footer() {
           <ul className="mt-3 space-y-2">
             {footerNav.map((item) => (
               <li key={item.href}>
+                <Link to={item.href} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">Websites</p>
+          <ul className="mt-3 space-y-2">
+            {footerServices.map((item) => (
+              <li key={item.label}>
                 <Link to={item.href} className="link-draw inline-block py-1.5 text-sm text-ink-soft hover:text-ink sm:py-0">
                   {item.label}
                 </Link>

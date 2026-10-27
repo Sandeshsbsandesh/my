@@ -1,20 +1,25 @@
 /** Brand, contact, and marketing copy. Edit this file to change the site. */
 
 export const site = {
-  name: "Briefly",
+  name: "Zebriyo",
+  /**
+   * Production origin with no trailing slash, e.g. "https://zebriyo.com".
+   * Leave empty to use the current host for canonical URLs.
+   */
+  url: "",
   /**
    * Inbox that receives briefs. When set, the form can open the visitor's email app.
    * Leave empty to offer copy and download only.
    * Example: "hello@yourstudio.com"
    */
-  email: "",
+  email: "sandeshsb0219@gmail.com",
   /**
    * Country code + number, digits only. Example: "919876543210".
    * Leave empty to hide the WhatsApp link.
    */
   whatsapp: "",
   description:
-    "Beautiful, high-performing websites for creators, startups, and businesses.",
+    "Affordable website maker for business websites, Instagram websites, influencer websites, and portfolios.",
 }
 
 export const nav = [
@@ -26,10 +31,23 @@ export const nav = [
 
 export const footerNav = [
   { label: "Work", href: "/work" },
+  { label: "Who it’s for", href: "/#make" },
   { label: "The first 24 hours", href: "/#prototype" },
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
+]
+
+export const footerServices = [
+  { label: "Affordable website maker", href: "/#make" },
+  { label: "Business websites", href: "/work" },
+  { label: "Instagram websites", href: "/work?preview=influencer" },
+  { label: "Influencer websites", href: "/work?preview=influencer" },
+  { label: "Portfolio websites", href: "/work" },
+  { label: "Hotel, clinic, shop samples", href: "/work" },
+  { label: "CA and CS websites", href: "/#sectors" },
+  { label: "NGO, school, college", href: "/#sectors" },
+  { label: "Animated websites", href: "/#make" },
 ]
 
 export const promises = [
@@ -107,7 +125,7 @@ export const works: Array<{
     title: "Creator portfolios",
     summary: "For YouTubers, artists, writers",
     detail:
-      "For Instagram and YouTube creators who have outgrown a link-in-bio page. The sample has four pages: reels and a YouTube preview, views, sponsored work, and contact.",
+      "Instagram websites and creator portfolios for people who have outgrown a link-in-bio page. The sample has four pages: reels and a YouTube preview, views, sponsored work, and contact.",
     points: ["Reels, a review, and a YouTube preview", "Instagram and YouTube views", "Brand sponsored", "Contact"],
     mock: "creator",
   },
@@ -127,7 +145,7 @@ export const works: Array<{
     title: "Business websites",
     summary: "For shops, clinics, services",
     detail:
-      "For businesses that need more than a brochure. The site explains the work and lets a visitor take the next step without hunting for a phone number.",
+      "Business websites for shops, clinics, hotels, and services that need more than a brochure. The site explains the work and lets a visitor enquire or book without hunting for a phone number.",
     points: ["Services", "Location and hours", "WhatsApp or a form", "A page for each core offer"],
     mock: "business",
   },
@@ -364,7 +382,35 @@ export function findPricingPlan(id: string | null) {
 export const faqs = [
   {
     q: "What actually happens in the first 24 hours?",
-    a: "We read your details and design a preview of the main page you can click through. You get a link and look at it in your own time.",
+    a: "Zebriyo reads your details and designs a preview of the main page you can click through. You get a link the next day and look at it in your own time. That is a preview, not the finished website.",
+  },
+  {
+    q: "How much does a website cost?",
+    a: "Zebriyo website care starts at ₹1,999 a month. A new Basic website starts at ₹9,999 one-time. Upscale is ₹14,999. Premium is ₹24,999. The price is fixed before you pay.",
+  },
+  {
+    q: "Is Zebriyo a cheap website maker?",
+    a: "Zebriyo is an affordable website maker, not a free builder. If you are comparing cheap website makers, Starter Care is ₹1,999 a month and a new Basic site is ₹9,999. The preview still has to look like a real business.",
+  },
+  {
+    q: "Who is the best website maker for a small business?",
+    a: "The best website maker is the one that ships a clear site you can afford and change. Zebriyo is built for small business websites, Instagram websites, influencer websites, and portfolios: a 24-hour preview, fixed prices, and care from ₹1,999 a month.",
+  },
+  {
+    q: "Can you make a business website?",
+    a: "Yes. Zebriyo makes business websites for shops, clinics, hotels, studios, and services. The site lists what you do, where you are, and how to enquire or book.",
+  },
+  {
+    q: "Can you make an Instagram website?",
+    a: "Yes. Zebriyo is an Instagram website maker for creators who have outgrown a link-in-bio page. The site can hold your work, views, brand deals, and a contact path that is yours.",
+  },
+  {
+    q: "Do influencers need a website?",
+    a: "An influencer website is the page you own when Instagram changes. Brands, bookings, and media kits live there. Zebriyo makes influencer websites and creator portfolios without a long agency process.",
+  },
+  {
+    q: "Can you make a portfolio website?",
+    a: "Yes. Zebriyo is a portfolio maker for photographers, designers, writers, and creators. You get a clean portfolio website for the work, plus a way for people to contact you.",
   },
   {
     q: "Do we need to get on calls?",
@@ -385,6 +431,30 @@ export const faqs = [
   {
     q: "Who is this for?",
     a: "Creators, influencers, startups, and businesses that want a professional site without a long agency process. If you need a large web application or months of custom software, we are the wrong studio.",
+  },
+  {
+    q: "Can you make a CA or CS website?",
+    a: "Yes. Zebriyo makes CA websites for chartered accountants and CS websites for company secretaries. The site can list services, the team, and a way for clients to enquire.",
+  },
+  {
+    q: "Do you make hotel websites?",
+    a: "Yes. Zebriyo makes hotel websites with rooms, stay dates, and book now. There is a sample hotel layout on the work page. It is a sample, not a client project.",
+  },
+  {
+    q: "Can you make an NGO website?",
+    a: "Yes. Zebriyo is an NGO website maker for organisations that need the mission, programmes, donate or volunteer, and contact on a phone-friendly site.",
+  },
+  {
+    q: "Do you make school and college websites?",
+    a: "Yes. Zebriyo makes school websites and college websites for admissions, notices, courses, and parent or student enquiries.",
+  },
+  {
+    q: "Can you make a clinic website?",
+    a: "Yes. Zebriyo makes clinic websites with services, doctors, and book appointment. There is a sample clinic layout on the work page. It is a sample, not a client project.",
+  },
+  {
+    q: "Do you make animated or the best looking websites?",
+    a: "Zebriyo designs animated, best-looking websites for people searching for the coolest website without an agency wait. Motion is used where it helps. The 24-hour step is still a preview of the main page, not the finished site.",
   },
   {
     q: "How does pricing work?",

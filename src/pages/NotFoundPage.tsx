@@ -1,11 +1,11 @@
 import { Button } from "../components/Button"
 import { Reveal } from "../components/motion"
-import { usePageTitle } from "../hooks/usePageTitle"
+import { Seo } from "../components/Seo"
 
 export function NotFoundPage() {
-  usePageTitle("Page not found — Briefly")
   return (
     <Reveal className="wrap flex flex-col items-start py-16 sm:py-20">
+      <Seo title="Page not found — Zebriyo" description="That page is not on Zebriyo." path="/404" index={false} />
       <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">404</p>
       <h1 className="mt-4 max-w-[12ch] font-serif text-5xl leading-[0.95] tracking-[-0.03em]">
         This page isn’t on the site.

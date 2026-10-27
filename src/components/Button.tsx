@@ -20,6 +20,7 @@ type Props = {
   className?: string
   onClick?: () => void
   type?: "button" | "submit"
+  disabled?: boolean
 }
 
 export function Button({
@@ -31,12 +32,14 @@ export function Button({
   className,
   onClick,
   type = "button",
+  disabled = false,
 }: Props) {
   const classes = cn(
     "inline-flex h-11 cursor-pointer items-center justify-center gap-2 px-4 text-sm font-medium sm:h-12 sm:px-5",
     jelly ? "jelly rounded-full" : pill ? "rounded-full" : "rounded-md",
     !jelly && "transition-[color,background-color,border-color,transform] duration-200 ease-out hover:-translate-y-px active:translate-y-0",
     variants[variant],
+    disabled && "pointer-events-none cursor-not-allowed opacity-55 hover:translate-y-0",
     className,
   )
 
@@ -63,7 +66,7 @@ export function Button({
   }
 
   return (
-    <button className={classes} type={type} onClick={onClick}>
+    <button className={classes} type={type} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )

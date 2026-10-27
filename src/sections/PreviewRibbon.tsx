@@ -19,6 +19,9 @@ export function PreviewRibbon() {
     <section id="previews" className="bg-[#fffefb]">
       <div className="wrap py-14 sm:py-16">
         <h2 className="font-serif text-[clamp(2rem,4vw,3.2rem)] leading-[0.96] tracking-[-0.03em]">Sample previews</h2>
+        <p className="mt-3 max-w-xl text-ink-soft">
+          Instagram influencer, boutique, clinic, jewellery shop, and hotel website layouts. Samples, not client work.
+        </p>
         <motion.ul
           className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
           initial={reduce ? "show" : "hidden"}

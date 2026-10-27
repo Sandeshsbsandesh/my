@@ -17,6 +17,10 @@ export function Faq() {
         <MaskHeading className="mt-4 max-w-[14ch] font-serif text-[clamp(2.1rem,4vw,3.4rem)] leading-[0.96] tracking-[-0.03em]">
           Before you send your details.
         </MaskHeading>
+        <p className="mt-4 max-w-xl text-ink-soft">
+          Prices, business websites, Instagram websites, influencer websites, portfolios, and how the 24-hour preview
+          works.
+        </p>
         <div className="mt-6 border-t border-line">
           {faqs.map((item, index) => {
             const isOpen = open === index

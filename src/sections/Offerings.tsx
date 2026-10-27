@@ -51,6 +51,8 @@ export function Offerings() {
       </MaskHeading>
       <Reveal delay={0.06}>
         <p className="mt-3 max-w-xl text-base text-ink-soft">
+          Business websites, Instagram websites, influencer websites, portfolios, startup sites, landing pages, and
+          revamps.{" "}
           <span className="lg:hidden">Tap one to see a sample layout.</span>
           <span className="hidden lg:inline">Choose a row to see a sample layout.</span>
         </p>
