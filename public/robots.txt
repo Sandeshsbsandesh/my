@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://zebriyo.com/sitemap.xml
+
 User-agent: Googlebot
 Allow: /
 

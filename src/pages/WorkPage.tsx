@@ -16,7 +16,7 @@ export function WorkPage() {
   const [params] = useSearchParams()
   const opened = findSamplePreview(params.get("preview"))
   const extra = opened ? previewSeo[opened.id] : undefined
-  const title = extra?.title ?? "Instagram, Business & Portfolio Website Examples | Zebriyo"
+  const title = extra?.title ?? "Zebriyo | Instagram, Business & Portfolio Website Examples"
   const description =
     extra?.description ??
     "Sample business websites, Instagram websites, influencer websites, boutique, clinic, hotel, and portfolio layouts from Zebriyo. Placeholder examples, not client projects."

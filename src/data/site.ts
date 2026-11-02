@@ -6,7 +6,7 @@ export const site = {
    * Production origin with no trailing slash, e.g. "https://zebriyo.com".
    * Leave empty to use the current host for canonical URLs.
    */
-  url: "",
+  url: "https://zebriyo.com",
   /**
    * Inbox that receives briefs. This is the To address, not the SMTP From.
    */

@@ -12,7 +12,8 @@ export function Footer() {
         <div>
           <Logo size="footer" />
           <p className="mt-4 max-w-xs text-sm text-ink-soft">
-            Affordable website maker for business websites, Instagram websites, influencer websites, and portfolios.
+            Zebriyo is an affordable website maker for business websites, Instagram websites, influencer websites, and
+            portfolios.
           </p>
         </div>
         <div>

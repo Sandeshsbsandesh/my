@@ -455,7 +455,7 @@ export function Hero({ hold = false, embed = false }: { hold?: boolean; embed?: 
                 {scene.id === "preview" ? (
                   <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-ink-soft">
                     <span className="mr-2 inline-block size-1.5 translate-y-[-1px] rounded-full bg-[#F04420]" aria-hidden="true" />
-                    Websites for creators, startups & businesses
+                    Zebriyo — websites for creators, startups & businesses
                   </p>
                 ) : null}
                 {scene.ice ? (

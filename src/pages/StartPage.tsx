@@ -212,7 +212,7 @@ export function StartPage() {
   return (
     <div className="wrap grid gap-8 py-8 sm:py-10 lg:grid-cols-12 lg:gap-10">
       <Seo
-        title="Get a Website Preview in 24 Hours | Zebriyo"
+        title="Zebriyo | Get a Website Preview in 24 Hours"
         description="Send your details to Zebriyo, an affordable website maker for business, Instagram, influencer, and portfolio websites. Preview of the main page in 24 hours. Care from ₹1,999/month."
         path="/start"
         jsonLd={jsonLd}

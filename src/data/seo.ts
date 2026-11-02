@@ -1,6 +1,9 @@
 import { faqs, formatRupees, pricingGroups, site } from "./site"
 
 export const SEO_KEYWORDS = [
+  "Zebriyo",
+  "Zebriyo website",
+  "Zebriyo website maker",
   "affordable website maker",
   "cheap website maker",
   "best website maker",
@@ -27,7 +30,7 @@ export const SEO_KEYWORDS = [
   "website maker India",
 ]
 
-export const HOME_TITLE = "Affordable Website Maker for Business, Instagram & Portfolios | Zebriyo"
+export const HOME_TITLE = "Zebriyo | Affordable Website Maker for Business, Instagram & Portfolios"
 export const HOME_DESCRIPTION =
   "Zebriyo is an affordable website maker for business websites, Instagram websites, influencer websites, and portfolios. Care from ₹1,999/month. Preview in 24 hours."
 
@@ -126,23 +129,23 @@ export const sectors = [
 
 export const previewSeo: Record<string, { title: string; description: string }> = {
   influencer: {
-    title: "Instagram Influencer Website Sample | Zebriyo",
+    title: "Zebriyo | Instagram Influencer Website Sample",
     description: "Sample influencer website by Zebriyo. See how an Instagram creator site can hold work, views, and contact — not a client project.",
   },
   boutique: {
-    title: "Boutique Website Sample | Zebriyo",
+    title: "Zebriyo | Boutique Website Sample",
     description: "Sample clothing boutique website with cart and buy now. An example layout from Zebriyo, not a client project.",
   },
   clinic: {
-    title: "Clinic Website Sample | Zebriyo",
+    title: "Zebriyo | Clinic Website Sample",
     description: "Sample clinic website with appointment booking. An example business website layout from Zebriyo, not a client project.",
   },
   jewellery: {
-    title: "Jewellery Shop Website Sample | Zebriyo",
+    title: "Zebriyo | Jewellery Shop Website Sample",
     description: "Sample jewellery shop website with buy now and cart. An example business website from Zebriyo, not a client project.",
   },
   hotel: {
-    title: "Hotel Website Sample | Zebriyo",
+    title: "Zebriyo | Hotel Website Sample",
     description: "Sample hotel website with book now. An example business website layout from Zebriyo, not a client project.",
   },
 }
@@ -184,6 +187,7 @@ export function homeJsonLd() {
       "@type": "Organization",
       "@id": `${url}#organization`,
       name: site.name,
+      alternateName: ["Zebriyo website maker", "Zebriyo.com"],
       legalName: site.name,
       url,
       logo: absoluteUrl("/zebriyo-logo.png"),
@@ -192,6 +196,7 @@ export function homeJsonLd() {
       slogan: "Go Beyond. Grow Bigger.",
       email: site.email || undefined,
       areaServed: ["IN", "Worldwide"],
+      brand: { "@type": "Brand", name: site.name },
       knowsAbout: [
         "Affordable website maker",
         "Animated websites",
@@ -247,9 +252,15 @@ export function homeJsonLd() {
       "@id": `${url}#website`,
       url,
       name: site.name,
+      alternateName: "Zebriyo website maker",
       description: HOME_DESCRIPTION,
       inLanguage: "en-IN",
       publisher: { "@id": `${url}#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${url}/work?preview={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
     },
     {
       "@context": "https://schema.org",
@@ -270,7 +281,7 @@ export function workJsonLd() {
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "Website examples — business, Instagram, influencer, portfolio",
+      name: "Zebriyo website examples — business, Instagram, influencer, portfolio",
       url,
       description:
         "Sample business websites, Instagram websites, influencer websites, and portfolio websites from Zebriyo. Placeholder layouts, not client projects.",
@@ -284,7 +295,7 @@ export function startJsonLd() {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: "Get a website preview in 24 hours",
+      name: "Zebriyo — get a website preview in 24 hours",
       url: absoluteUrl("/start"),
       description:
         "Send your details to Zebriyo, an affordable website maker. You get a working preview of the main page the next day.",
