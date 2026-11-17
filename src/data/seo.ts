@@ -4,9 +4,18 @@ export const SEO_KEYWORDS = [
   "Zebriyo",
   "Zebriyo website",
   "Zebriyo website maker",
-  "affordable website maker",
-  "cheap website maker",
   "best website maker",
+  "best website makers",
+  "best website maker India",
+  "best website maker for small business",
+  "10 best website makers",
+  "affordable website maker",
+  "affordable website maker India",
+  "cheap website maker",
+  "cheap website maker India",
+  "website maker India",
+  "website maker Bengaluru",
+  "done for you website maker",
   "best animated website",
   "best looking websites",
   "coolest website",
@@ -27,12 +36,11 @@ export const SEO_KEYWORDS = [
   "Instagram website",
   "influencer website",
   "portfolio maker",
-  "website maker India",
 ]
 
-export const HOME_TITLE = "Zebriyo | Affordable Website Maker for Business, Instagram & Portfolios"
+export const HOME_TITLE = "Zebriyo | Best Affordable Website Maker in India for Business & Creators"
 export const HOME_DESCRIPTION =
-  "Zebriyo is an affordable website maker for business websites, Instagram websites, influencer websites, and portfolios. Care from ₹1,999/month. Preview in 24 hours."
+  "Zebriyo is an affordable website maker in India for business, Instagram, influencer, and portfolio websites. Done-for-you preview in 24 hours. Care from ₹1,999/month. Bengaluru (Infywe)."
 
 export const audiences = [
   {
@@ -187,16 +195,32 @@ export function homeJsonLd() {
       "@type": "Organization",
       "@id": `${url}#organization`,
       name: site.name,
-      alternateName: ["Zebriyo website maker", "Zebriyo.com"],
-      legalName: site.name,
+      alternateName: ["Zebriyo website maker", "Zebriyo.com", site.legalName],
+      legalName: site.legalName,
       url,
       logo: absoluteUrl("/zebriyo-logo.png"),
       image: absoluteUrl("/og.png"),
       description: HOME_DESCRIPTION,
       slogan: "Go Beyond. Grow Bigger.",
       email: site.email || undefined,
+      telephone: site.phone ? `+91${site.phone.replace(/\D/g, "")}` : undefined,
+      taxID: site.gstin || undefined,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.city,
+        addressRegion: site.region,
+        addressCountry: "IN",
+      },
       areaServed: ["IN", "Worldwide"],
       brand: { "@type": "Brand", name: site.name },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: site.email || undefined,
+        telephone: site.phone ? `+91${site.phone.replace(/\D/g, "")}` : undefined,
+        areaServed: "IN",
+        availableLanguage: ["English", "Hindi"],
+      },
       knowsAbout: [
         "Affordable website maker",
         "Animated websites",
@@ -223,7 +247,16 @@ export function homeJsonLd() {
       image: absoluteUrl("/og.png"),
       description: HOME_DESCRIPTION,
       priceRange: "₹₹",
+      email: site.email || undefined,
+      telephone: site.phone ? `+91${site.phone.replace(/\D/g, "")}` : undefined,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.city,
+        addressRegion: site.region,
+        addressCountry: "IN",
+      },
       areaServed: { "@type": "Country", name: "India" },
+      provider: { "@id": `${url}#organization` },
       serviceType: [
         "Affordable website maker",
         "Animated website design",

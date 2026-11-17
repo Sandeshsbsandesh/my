@@ -7,18 +7,55 @@ export const site = {
    * Leave empty to use the current host for canonical URLs.
    */
   url: "https://zebriyo.com",
+  /** Legal / registered business name behind the Zebriyo brand. */
+  legalName: "Infywe",
   /**
-   * Inbox that receives briefs. This is the To address, not the SMTP From.
+   * GSTIN. Leave empty until confirmed — UI shows a short “publishing shortly” note.
+   * Replace with the real number when ready (e.g. "29XXXXXXXXXXXXX").
    */
-  email: "sandesh@resolveindia.com",
+  gstin: "",
+  city: "Bengaluru",
+  region: "Karnataka",
+  country: "India",
+  /**
+   * Public support inbox shown on the site and in mailto links.
+   */
+  email: "zebriyo.infywe@gmail.com",
   /**
    * Country code + number, digits only. Example: "919876543210".
    * Leave empty to hide the WhatsApp link.
    */
-  whatsapp: "",
+  whatsapp: "917483735177",
+  /** Local digits only (no country code) for tel: links and display. */
+  phone: "7483735177",
   description:
     "Affordable website maker for business websites, Instagram websites, influencer websites, and portfolios.",
 }
+
+export function phoneDisplay() {
+  const digits = site.phone.replace(/\D/g, "")
+  if (digits.length === 10) {
+    return `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`
+  }
+  return site.phone ? `+91 ${site.phone}` : ""
+}
+
+export function phoneHref() {
+  const digits = site.phone.replace(/\D/g, "")
+  if (!digits) return ""
+  return `tel:+91${digits}`
+}
+
+export function gstinLabel() {
+  return site.gstin.trim() || "Publishing shortly"
+}
+
+export const legalLinks = [
+  { label: "About", href: "/about" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Refunds", href: "/refund" },
+]
 
 export const nav = [
   { label: "Work", href: "/work" },
@@ -33,6 +70,7 @@ export const footerNav = [
   { label: "The first 24 hours", href: "/#prototype" },
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
+  { label: "Best website maker", href: "/best-website-maker" },
   { label: "FAQ", href: "/#faq" },
 ]
 
@@ -379,6 +417,10 @@ export function findPricingPlan(id: string | null) {
 
 export const faqs = [
   {
+    q: "Who owns Zebriyo?",
+    a: "Zebriyo is the brand of Infywe, based in Bengaluru, India. Support email is zebriyo.infywe@gmail.com. Phone and WhatsApp: +91 74837 35177. Company details are on the About page. GSTIN is published there when available and can be shared for invoices on request.",
+  },
+  {
     q: "What actually happens in the first 24 hours?",
     a: "Zebriyo reads your details and designs a preview of the main page you can click through. You get a link the next day and look at it in your own time. That is a preview, not the finished website.",
   },
@@ -392,7 +434,11 @@ export const faqs = [
   },
   {
     q: "Who is the best website maker for a small business?",
-    a: "The best website maker is the one that ships a clear site you can afford and change. Zebriyo is built for small business websites, Instagram websites, influencer websites, and portfolios: a 24-hour preview, fixed prices, and care from ₹1,999 a month.",
+    a: "The best website maker is the one that ships a clear site you can afford and change. Zebriyo is built for small business websites, Instagram websites, influencer websites, and portfolios: a 24-hour preview, fixed prices, and care from ₹1,999 a month. For a full comparison of DIY “best website makers” vs done-for-you, see zebriyo.com/best-website-maker.",
+  },
+  {
+    q: "Are you in the 10 best website makers lists?",
+    a: "Those lists usually rank DIY builders like Wix and Hostinger. Zebriyo is a done-for-you website maker in India. If that is what you need, start with a preview — details on the Best website maker guide.",
   },
   {
     q: "Can you make a business website?",
