@@ -29,7 +29,15 @@ export function PrivacyPage() {
       </LegalBlock>
 
       <LegalBlock title="How we use it">
-        <p>We use your details only to reply, prepare a preview, deliver the website project, and support care plans you buy. We do not sell your personal data.</p>
+        <p>
+          We use your details only to reply, prepare a preview, deliver the website project, and support care plans you
+          buy. We do not sell your personal data.
+        </p>
+        <p>
+          If you submit client feedback and tick consent to publish, we may show your first name, business name, rating,
+          and note as a testimonial on zebriyo.com or related marketing. You can ask us to remove it anytime by emailing{" "}
+          {site.email}.
+        </p>
       </LegalBlock>
 
       <LegalBlock title="Sharing">

@@ -67,6 +67,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link to="/feedback" className="link-draw inline-block py-1.5 text-ink-soft hover:text-ink sm:py-0">
+                Client feedback
+              </Link>
+            </li>
+            <li>
               <Link to="/about" className="link-draw inline-block py-1.5 text-ink-soft hover:text-ink sm:py-0">
                 About Infywe
               </Link>

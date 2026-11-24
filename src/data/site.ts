@@ -52,6 +52,7 @@ export function gstinLabel() {
 
 export const legalLinks = [
   { label: "About", href: "/about" },
+  { label: "Feedback", href: "/feedback" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Refunds", href: "/refund" },

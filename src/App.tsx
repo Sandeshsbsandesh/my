@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Layout } from "./components/Layout"
 import { AboutPage } from "./pages/AboutPage"
 import { BestWebsiteMakerPage } from "./pages/BestWebsiteMakerPage"
+import { FeedbackPage } from "./pages/FeedbackPage"
 import { HomePage } from "./pages/HomePage"
 import { NotFoundPage } from "./pages/NotFoundPage"
 import { PrivacyPage } from "./pages/PrivacyPage"
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/start" element={<StartPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/best-website-maker" element={<BestWebsiteMakerPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
