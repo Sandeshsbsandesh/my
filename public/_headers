@@ -1,0 +1,22 @@
+# Allow indexing and AI citation. Do not challenge friendly crawlers at the app layer.
+/*
+  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1
+  X-Content-Type-Options: nosniff
+
+/llms.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+/about
+  X-Robots-Tag: index, follow
+
+/best-website-maker
+  X-Robots-Tag: index, follow

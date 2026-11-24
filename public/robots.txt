@@ -1,36 +1,50 @@
+# Zebriyo — AI and search crawlers are welcome.
+# If a bot still fails, check Cloudflare Bot Fight Mode / AI Crawl Control
+# (dashboard), not this file.
+
 User-agent: *
 Allow: /
 
 Sitemap: https://zebriyo.com/sitemap.xml
 
+# Search
 User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
 
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: anthropic-ai
+User-agent: Bingbot
 Allow: /
 
 User-agent: Applebot
 Allow: /
 
 User-agent: Applebot-Extended
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Others
+User-agent: PerplexityBot
 Allow: /
 
 User-agent: Bytespider
@@ -40,6 +54,9 @@ User-agent: CCBot
 Allow: /
 
 User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
 Allow: /
 
 Disallow: /intro-to-hero.html

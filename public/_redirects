@@ -1,1 +1,5 @@
+# Prefer static about for crawlers / direct visits (HTML without JS).
+/about  /about/  302
+
+# SPA fallback for the React app.
 /*  /index.html  200
